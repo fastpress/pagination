@@ -1,51 +1,59 @@
-# Fastpress HTTP Request
+# Paginator
 
-This repository contains the `Request` class, a crucial component of the `fastpress/framework`. The `Request` class provides a comprehensive interface for handling HTTP requests in PHP applications. It simplifies accessing request data such as GET, POST, COOKIE, and SERVER variables, and includes methods for common request operations.
+A PHP Pagination Library
 
-## Features
-
-- Easy retrieval of GET, POST, COOKIE, and SERVER data.
-- Convenience methods for checking the HTTP request method (GET, POST, PUT, DELETE).
-- Utilities for common tasks like checking for Ajax requests and secure connections.
-- Flexibility to extend or modify for custom use-cases.
+The Paginator class provides a simple and efficient way to implement pagination in your PHP applications. It handles the calculation of page numbers, total records, and other related information, making it easy to create paginated interfaces.
 
 ## Installation
 
-To use this component, first ensure you have `fastpress/framework` installed. This `Request` class is a dependency of the framework and is meant to be used within its context.
-
-If you are managing your project with Composer, you can add this dependency directly by running:
+To use the Paginator library, you can install it using Composer:
 
 ```bash
-composer require fastpress/request
+composer require fastpress/pagination
 ```
-Ensure that this aligns with the version constraints of fastpress/framework.
-
 ## Usage
-To use the Request class, create an instance of it in your PHP application:
+Create a new Paginator instance:
 ```php
-use Fastpress\Http\Request;
+use Fastpress\Pagination\Paginator;
 
-$request = new Request();
-```
-You can then access various parts of the HTTP request:
-```php
-// Get a value from the GET array
-$value = $request->get('key');
-
-// Check if the request method is POST
-if ($request->isPost()) {
-    // Handle POST request
-}
+$paginator = new Paginator(100, 3, 10);
+// 100: Total number of records.
+// 3: Current page number.
+// 10: Records per page limit.
 ```
 
-## Contributing
-Contributions are welcome! Please feel free to submit a pull request or open issues to improve the library.
+Get pagination data:
+```
+php
+$paginationData = $paginator->getPaginationData();
+```
 
+The $paginationData array will contain the following information:
+ - current_page_number: The current page number.
+- total_records: The total number of records.
+- total_records_remaining: The number of remaining records.
+- total_pages: The total number of pages.
+- limit: The records per page limit.
+- has_next_page: Whether there is a next page.
+- has_prev_page: Whether there is a previous page.
+- next_page: The next page number (if available).
+- previous_page: The previous page number (if available).
+- display_pages: An array of page numbers to display in the pagination controls.
 
-## License
-This library is open-sourced software licensed under the MIT license.
+## Example
+```php
+<?php
 
-## Support
-If you encounter any issues or have questions, please file them in the issues section on GitHub.
+use Fastpress\Pagination\Paginator;
 
-"# paginator" 
+// Assuming you have a query that fetches data from a database
+$totalRecords = 500;
+$currentPage = 3;
+$limit = 10;
+
+$paginator = new Paginator($totalRecords, $currentPage, $limit);
+$paginationData = $paginator->getPaginationData();
+
+// Use the pagination data to render your pagination controls and display the data
+```
+
